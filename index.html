@@ -22,9 +22,55 @@
         </div>
         <div>
             <button class="handle-button" id="start-game">START GAME</button>
+            <button class="handle-button" id="reset-game">RESET GAME</button>
+            <button class="handle-button" id="pause-game">PAUSE GAME</button>
             <p id="reminder">PRESS START TO INITIATE THE GAME</p>
         </div>
+<div id=speed-options" class="options">
+    <h2>SPEED OPTIONS</h2>
+    <input id="slow" type="radio" name="speed" value="slow">
+    <label for="slow">SLOW</label>
+    <input id="regular" type="radio" name="speed" value="regular" checked>
+    <label for="regular">REGULAR</label>
+    <input id="fast" type="radio" name="speed" value="fast">
+    <label for="fast">FAST</label>
 
+</div>
+
+<div id=visual-options" class="options">
+        <h2>VIEWING OPTIONS</h2>
+        <input id="black-white" type="radio" name="visual" value="black-white">
+        <label for="black-white">BLACK AND WHITE</label>
+        <input id="heatmap" type="radio" name="visual" value="heatmap">
+        <label for="heatmap">HEATMAP</label>
+        <input id="emojimap" type="radio" name="visual" value="emojimap" checked>
+        <label for="emojimap">EMOJI</label>
+    
+    </div>
+
+    <div id=size-options" class="options">
+            <h2>SIZE OPTIONS</h2>
+            <input id="small" type="radio" name="size" value="small">
+            <label for="small">SMALL</label>
+            <input id="medium" type="radio" name="size" value="medium" checked>
+            <label for="medium">MEDIUM</label>
+            <input id="large" type="radio" name="size" value="large">
+            <label for="large">LARGE</label>
+        
+        </div>
+
+        <div id=seed-options" class="options">
+                <h2>SEEDING OPTIONS</h2>
+                <input id="low" type="radio" name="seed" value="low">
+                <label for="low">LOW POPULATION</label>
+                <input id="average" type="radio" name="seed" value="average" checked>
+                <label for="average">AVERAGE POPULATION</label>
+                <input id="high" type="radio" name="seed" value="high">
+                <label for="high">HIGH POPULATION</label>
+            
+            </div>
+
+            <h3 id="change-alert"></h3>
     </header>
     <canvas></canvas>
     <script src="app.js"></script>

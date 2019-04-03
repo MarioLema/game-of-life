@@ -56,3 +56,6 @@ header p {
   justify-content: center;
   display: none;
 }
+#change-alert{
+  color:red;
+}
