@@ -1,9 +1,10 @@
 //===========================================DATA OBJECT========================================================
 const DATA = {
     canvas: document.querySelector('canvas'),
-    resolution: 50,
+    resolution: 10,
     width: 1000,
     height: 1000,
+    fontSize: `0.5rem`,
     cols() {
         return this.width / this.resolution
     },
@@ -13,10 +14,10 @@ const DATA = {
     baseArr: [],
     nextArr: [],
     playing: false,
-    intervalTime: 200,
+    intervalTime: 500,
     timeout: null,
     population: `average`,
-    canvasStyle: `emojimap`,
+    canvasStyle: `heatmap`,
 
 
 
@@ -32,8 +33,11 @@ const VIEW = {
         MODIFIER.render(DATA.baseArr);
     },
 
-    changeAlert() {
-        document.getElementById(`change-alert`).innerText = `CAN'T CHANGE OPTIONS WHILE PLAYING`;
+    // changeAlert() {
+    //     document.getElementById(`change-alert`).innerText = `CAN'T CHANGE OPTIONS WHILE PLAYING`;
+    // },
+    disableOptions(bool) {
+        document.querySelectorAll(`input`).forEach((x) => bool ? x.disabled = true : x.disabled = false);
     }
 
 };
@@ -44,6 +48,7 @@ const MODIFIER = {
     startGame() {
         if (!DATA.playing) {
             DATA.playing = true;
+            VIEW.disableOptions(true);
             requestAnimationFrame(this.update);
         }
 
@@ -51,6 +56,7 @@ const MODIFIER = {
 
     resetGame() {
         DATA.playing = false;
+        VIEW.disableOptions(false);
         VIEW.generateCanvas();
         clearTimeout(DATA.timeout);
     },
@@ -58,6 +64,7 @@ const MODIFIER = {
     pauseGame() {
         if (DATA.playing) {
             DATA.playing = false;
+            VIEW.disableOptions(false);
             clearTimeout(DATA.timeout);
         }
     },
@@ -65,11 +72,20 @@ const MODIFIER = {
     buildGrid() {
         return Array(DATA.cols()).fill(null)
             .map(() => Array(DATA.rows()).fill(null)
-                .map(() => Math.floor(Math.random() * 2)));
+                .map(() => this.populationAlg()));
     },
 
     populationAlg() {
-
+        let binary;
+        let random = Math.random() * 2;
+        if (DATA.population === `low`) {
+            binary = random > 1.3 ? 1 : 0;
+        } else if (DATA.population === `average`) {
+            binary = random >= 1 ? 1 : 0;
+        } else {
+            binary = random < 1.3 ? 1 : 0;
+        }
+        return binary;
     },
 
 
@@ -83,19 +99,15 @@ const MODIFIER = {
     },
 
     render(grid) {
+        let ctx = DATA.canvas.getContext(`2d`);
+        ctx.clearRect(0, 0, DATA.width, DATA.height);
         for (let col = 0; col < grid.length; col++) {
             for (let row = 0; row < grid[col].length; row++) {
-                // const cell = grid[col][row];
-                let ctx = DATA.canvas.getContext(`2d`);
-                // ctx.beginPath();
-                // ctx.rect(col * DATA.resolution, row * DATA.resolution, DATA.resolution, DATA.resolution);
-                // ctx.fillStyle = cell ? 'black' : 'white';
-                // ctx.fill();
-                // ctx.stroke();
+
 
                 if (DATA.canvasStyle === `emojimap`) {
                     let cell = this.getCellText(grid[col][row]);
-                    ctx.font = "2rem Arial";
+                    ctx.font = `${DATA.fontSize} Arial`;
                     ctx.fillText(cell, col * DATA.resolution, row * DATA.resolution);
                 } else {
                     let cellColor = this.getCellColor(grid[col][row]);
@@ -105,6 +117,7 @@ const MODIFIER = {
                     ctx.fill();
                     ctx.stroke();
                 }
+
             }
         }
     },
@@ -140,19 +153,19 @@ const MODIFIER = {
         if (cell <= -3) {
             emoji = `🧟`;
         } else if (cell === -2) {
-            emoji = `🌳`;
+            emoji = `👻`;
         } else if (cell === -1) {
             emoji = `⚰️`;
         } else if (cell === 0) {
             emoji = `💀`;
         } else if (cell === 1) {
-            emoji = [`👨`, `👩`][Math.floor(Math.random() * 2)];
+            emoji = `👶`;
         } else if (cell === 2) {
-            emoji = [`👨‍🚀`, `👩‍🚀`][Math.floor(Math.random() * 2)];
+            emoji = `🧑`;
         } else if (cell === 3) {
-            emoji = [`👴`, `👵`][Math.floor(Math.random() * 2)];
+            emoji = `🧓`;
         } else {
-            emoji = [`🧙`, `🧙‍♀️`][Math.floor(Math.random() * 2)];
+            emoji = `🧙`;
         }
         return emoji;
     },
@@ -181,7 +194,7 @@ const MODIFIER = {
         let nextRow = row + 1;
         let nextCol = col + 1;
         let liveNeigh = 0;
-
+        
 
         let topCenter = grid[col][prevRow] ? grid[col][prevRow] : grid[col][lastIndex];
         let leftCenter = grid[prevCol] ? grid[prevCol][row] : grid[lastIndex][row];
@@ -283,7 +296,7 @@ const MODIFIER = {
                     DATA.intervalTime = 1000;
                     break;
                 case `regular`:
-                    DATA.intervalTime = 200;
+                    DATA.intervalTime = 500;
                     break;
                 case `fast`:
                     DATA.intervalTime = 0;
@@ -297,25 +310,34 @@ const MODIFIER = {
                     VIEW.generateCanvas();
                     break;
                 case `emojimap`:
+                    DATA.resolution = 50;
+                    DATA.fontSize = `2.5rem`;
                     DATA.canvasStyle = `emojimap`;
                     VIEW.generateCanvas();
                     break;
                 case `small`:
                     DATA.width = 100;
                     DATA.height = 100;
-                    DATA.resolution = 5;
+                    DATA.resolution = 10;
+                    DATA.fontSize = `0.5`;
                     VIEW.generateCanvas();
                     break;
                 case `medium`:
                     DATA.width = 500;
                     DATA.height = 500;
-                    DATA.resolution = 5;
+                    DATA.resolution = 20;
+                    DATA.fontSize = `1rem`;
                     VIEW.generateCanvas();
                     break;
                 case `large`:
                     DATA.width = 1000;
                     DATA.height = 1000;
-                    DATA.resolution = 10;
+                    if (DATA.canvasStyle = `emojimap`) {
+                        DATA.resolution = 50;
+                        DATA.fontSize = `2.5rem`;
+                    } else {
+                        DATA.resolution = 10;
+                    }
                     VIEW.generateCanvas();
                     break;
                 case `low`:
@@ -333,8 +355,7 @@ const MODIFIER = {
                 default:
                     return
             }
-        } else {
-            VIEW.changeAlert();
+
         }
     },
     //================PLAY GAME METHODS==================
