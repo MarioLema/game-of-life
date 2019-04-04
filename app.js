@@ -6,10 +6,10 @@ const DATA = {
     height: 1000,
     fontSize: `0.5rem`,
     cols() {
-        return this.width / this.resolution
+        return this.width / this.resolution;
     },
     rows() {
-        return this.height / this.resolution
+        return this.height / this.resolution;
     },
     baseArr: [],
     nextArr: [],
@@ -30,15 +30,36 @@ const VIEW = {
         DATA.canvas.width = DATA.width;
         DATA.canvas.height = DATA.height;
         DATA.baseArr = MODIFIER.buildGrid();
-        MODIFIER.render(DATA.baseArr);
+        this.render(DATA.baseArr);
     },
 
-    // changeAlert() {
-    //     document.getElementById(`change-alert`).innerText = `CAN'T CHANGE OPTIONS WHILE PLAYING`;
-    // },
     disableOptions(bool) {
         document.querySelectorAll(`input`).forEach((x) => bool ? x.disabled = true : x.disabled = false);
-    }
+    },
+
+    render(grid) {
+        let ctx = DATA.canvas.getContext(`2d`);
+        ctx.clearRect(0, 0, DATA.width, DATA.height);
+        for (let col = 0; col < grid.length; col++) {
+            for (let row = 0; row < grid[col].length; row++) {
+
+
+                if (DATA.canvasStyle === `emojimap`) {
+                    let cell = MODIFIER.getCellText(grid[col][row]);
+                    ctx.font = `${DATA.fontSize} Arial`;
+                    ctx.fillText(cell, col * DATA.resolution, row * DATA.resolution);
+                } else {
+                    let cellColor = MODIFIER.getCellColor(grid[col][row]);
+                    ctx.beginPath();
+                    ctx.rect(col * DATA.resolution, row * DATA.resolution, DATA.resolution, DATA.resolution);
+                    ctx.fillStyle = cellColor;
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+            }
+        }
+    },
 
 };
 
@@ -91,36 +112,14 @@ const MODIFIER = {
 
     update() {
         this.nextGen();
-        this.render(DATA.nextArr);
+        VIEW.render(DATA.nextArr);
         DATA.timeout = setTimeout(() => {
             requestAnimationFrame(this.update);
         }, DATA.intervalTime);
 
     },
 
-    render(grid) {
-        let ctx = DATA.canvas.getContext(`2d`);
-        ctx.clearRect(0, 0, DATA.width, DATA.height);
-        for (let col = 0; col < grid.length; col++) {
-            for (let row = 0; row < grid[col].length; row++) {
 
-
-                if (DATA.canvasStyle === `emojimap`) {
-                    let cell = this.getCellText(grid[col][row]);
-                    ctx.font = `${DATA.fontSize} Arial`;
-                    ctx.fillText(cell, col * DATA.resolution, row * DATA.resolution);
-                } else {
-                    let cellColor = this.getCellColor(grid[col][row]);
-                    ctx.beginPath();
-                    ctx.rect(col * DATA.resolution, row * DATA.resolution, DATA.resolution, DATA.resolution);
-                    ctx.fillStyle = cellColor;
-                    ctx.fill();
-                    ctx.stroke();
-                }
-
-            }
-        }
-    },
 
     getCellColor(cell) {
         let color;

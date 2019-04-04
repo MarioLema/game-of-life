@@ -4,75 +4,110 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MEMORY GAME</title>
+    <title>GAME OF LIFE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Gruppo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
 
 </head>
 
 <body>
     <header>
-        <h1>MEMORY GAME</h1>
-        <p>This is a simple memory game. There are 65 different faces to match so you can play again and again. You are
-            also against the clock, make sure you work fast.</p>
-        <div class="variable-container">
-            <h3 id="time-left">TIME LEFT: 100s</h3>
-            <h3 id="turns">TRIES : 0</h3>
-        </div>
+        <h1>TOROIDAL GAME OF LIFE</h1>
+        <p>The game of life is a simple game where cells are either dead or alive. In this version cells "age" the more
+            generations they spend being alive or dead. The board has been designed to be toroidal, meaning the last
+            column and the last row connect with their respective first row or column.</p>
+        <p>The game has several options like a binary black and white for alive and dead, a heatmap or a fun emoji
+            version. See the legend below for more info and refer to <a
+                href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank"
+                rel="noopener noreferrer">Wikipedia</a> for more info</p>
         <div>
             <button class="handle-button" id="start-game">START GAME</button>
             <button class="handle-button" id="reset-game">RESET GAME</button>
             <button class="handle-button" id="pause-game">PAUSE GAME</button>
             <p id="reminder">PRESS START TO INITIATE THE GAME</p>
         </div>
-<div id=speed-options" class="options">
-    <h2>SPEED OPTIONS</h2>
-    <input id="slow" type="radio" name="speed" value="slow">
-    <label for="slow">SLOW</label>
-    <input id="regular" type="radio" name="speed" value="regular" checked>
-    <label for="regular">REGULAR</label>
-    <input id="fast" type="radio" name="speed" value="fast">
-    <label for="fast">FAST</label>
 
-</div>
 
-<div id=visual-options" class="options">
-        <h2>VIEWING OPTIONS</h2>
-        <input id="black-white" type="radio" name="visual" value="black-white">
-        <label for="black-white">BLACK AND WHITE</label>
-        <input id="heatmap" type="radio" name="visual" value="heatmap" checked>
-        <label for="heatmap">HEATMAP</label>
-        <input id="emojimap" type="radio" name="visual" value="emojimap">
-        <label for="emojimap">EMOJI</label>
-    
-    </div>
+    </header>
+    <section>
+        <div class="options-container">
+            <div id=speed-options" class="options">
+                <h2>SPEED OPTIONS</h2>
+                <input id="slow" type="radio" name="speed" value="slow">
+                <label for="slow">SLOW</label></br>
+                <input id="regular" type="radio" name="speed" value="regular" checked>
+                <label for="regular">REGULAR</label></br>
+                <input id="fast" type="radio" name="speed" value="fast">
+                <label for="fast">FAST</label>
 
-    <div id=size-options" class="options">
-            <h2>SIZE OPTIONS</h2>
-            <input id="small" type="radio" name="size" value="small">
-            <label for="small">SMALL</label>
-            <input id="medium" type="radio" name="size" value="medium">
-            <label for="medium">MEDIUM</label>
-            <input id="large" type="radio" name="size" value="large" checked>
-            <label for="large">LARGE</label>
-        
-        </div>
 
-        <div id=seed-options" class="options">
-                <h2>SEEDING OPTIONS</h2>
-                <input id="low" type="radio" name="seed" value="low">
-                <label for="low">LOW POPULATION</label>
-                <input id="average" type="radio" name="seed" value="average" checked>
-                <label for="average">AVERAGE POPULATION</label>
-                <input id="high" type="radio" name="seed" value="high">
-                <label for="high">HIGH POPULATION</label>
-            
             </div>
 
-            <h3 id="change-alert"></h3>
-    </header>
-    <canvas></canvas>
+            <div id=visual-options" class="options">
+                <h2>VIEWING OPTIONS</h2>
+                <input id="black-white" type="radio" name="visual" value="black-white">
+                <label for="black-white">BLACK AND WHITE</label></br>
+                <input id="heatmap" type="radio" name="visual" value="heatmap" checked>
+                <label for="heatmap">HEATMAP</label></br>
+                <input id="emojimap" type="radio" name="visual" value="emojimap">
+                <label for="emojimap">EMOJI</label>
+
+            </div>
+
+            <div id=size-options" class="options">
+                <h2>SIZE OPTIONS</h2>
+                <input id="small" type="radio" name="size" value="small">
+                <label for="small">SMALL</label></br>
+                <input id="medium" type="radio" name="size" value="medium">
+                <label for="medium">MEDIUM</label></br>
+                <input id="large" type="radio" name="size" value="large" checked>
+                <label for="large">LARGE</label>
+
+            </div>
+
+            <div id=seed-options" class="options">
+                <h2>SEEDING OPTIONS</h2>
+                <input id="low" type="radio" name="seed" value="low">
+                <label for="low">LOW POPULATION</label></br>
+                <input id="average" type="radio" name="seed" value="average" checked>
+                <label for="average">AVERAGE POPULATION</label></br>
+                <input id="high" type="radio" name="seed" value="high">
+                <label for="high">HIGH POPULATION</label>
+
+            </div>
+        </div>
+        <canvas></canvas>
+    </section>
+    <div class="legends-holder">
+        <h3>EMOJI LEGEND</h3>
+        <div class="emoji-legend legend">
+            <p>Dead <b>4+</b> gen: <span>🧟</span></p>
+            <p>Dead <b>3</b> gen: <span>👻</span></p>
+            <p>Dead <b>2</b> gen: <span>⚰️</span></p>
+            <p>Dead <b>1</b> gen: <span>💀</span></p>
+            <p>Alive <b>1</b> gen: <span>👶</span></p>
+            <p>Alive <b>2</b> gen: <span>🧑</span></p>
+            <p>Alive <b>3</b> gen: <span>🧓</span></p>
+            <p>Alive <b>4</b> gen: <span>🧙</span></p>
+        </div>
+        <h3>HEATMAP LEGEND</h3>
+        <div class="heatmap-legend legend">
+            <p>Dead <b>4+</b> gen: <span class="span-box" style="background: #142ead"></span></p>
+            <p>Dead <b>3</b> gen: <span class="span-box" style="background: #4761E0"></span></p>
+            <p>Dead <b>2</b> gen: <span class="span-box" style="background: #7A94FF"></span></p>
+            <p>Dead <b>1</b> gen: <span class="span-box" style="background: #ADC7FF"></span></p>
+            <p>Alive <b>1</b> gen: <span class="span-box" style="background: #D1FFAD"></span></p>
+            <p>Alive <b>2</b> gen: <span class="span-box" style="background: #9EFF7A"></span></p>
+            <p>Alive <b>3</b> gen: <span class="span-box" style="background: #6BE047"></span></p>
+            <p>Alive <b>4</b> gen: <span class="span-box" style="background: #38ad14"></span></p>
+        </div>
+        <h3>BLACK AND WHITE LEGEND</h3>
+        <div class="black-white-legend legend">
+            <p>Dead: <span class="span-box" style="background: #E6E6E6"></span></p>
+            <p>Alive: <span class="span-box" style="background: #333333"></span></p>
+        </div>
+    </div>
     <script src="app.js"></script>
 </body>
 
